@@ -12,6 +12,21 @@ import { useState } from "react";
 
 export default function LoginScreen({ loginpressed }) {
   const [AlreadyRegistred, setAlreadyRegistred] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [notMatch, setNotMatch] = useState(false);
+  const [email, setEmail] = useState("");
+  const [notValidMail, setNotValidMail] = useState(false);
+
+  const inputWrapper = {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#283039",
+    borderRadius: 12,
+    borderWidth: notMatch || notValidMail ? 1 : 0,
+    borderColor: notMatch || notValidMail ? "red" : undefined,
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -26,10 +41,15 @@ export default function LoginScreen({ loginpressed }) {
           <Text style={styles.title}>Create a new account</Text>
         )}
         <View style={styles.inputContainer}>
-          <View style={styles.inputWrapper}>
+          {notValidMail && (
+            <Text style={{ color: "red" }}>Email is not valid!</Text>
+          )}
+          <View style={inputWrapper}>
             <TextInput
               placeholder="Email"
               placeholderTextColor="#9cabba"
+              value={email}
+              onChangeText={setEmail}
               style={styles.input}
             />
             <Ionicons
@@ -41,10 +61,15 @@ export default function LoginScreen({ loginpressed }) {
           </View>
         </View>
         <View style={styles.inputContainer}>
-          <View style={styles.inputWrapper}>
+          {notMatch && (
+            <Text style={{ color: "red" }}>Passwords do not match!</Text>
+          )}
+          <View style={inputWrapper}>
             <TextInput
               placeholder="Password"
               placeholderTextColor="#9cabba"
+              value={password}
+              onChangeText={setPassword}
               secureTextEntry
               style={styles.input}
             />
@@ -59,10 +84,15 @@ export default function LoginScreen({ loginpressed }) {
 
         {!AlreadyRegistred && (
           <View style={styles.inputContainer}>
-            <View style={styles.inputWrapper}>
+            {notMatch && (
+              <Text style={{ color: "red" }}>Passwords do not match!</Text>
+            )}
+            <View style={inputWrapper}>
               <TextInput
                 placeholder="Confirm Password"
                 placeholderTextColor="#9cabba"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
                 secureTextEntry
                 style={styles.input}
               />
@@ -87,7 +117,23 @@ export default function LoginScreen({ loginpressed }) {
         ) : (
           <View style={styles.buttonContainer}>
             <Pressable
-              onPress={() => loginpressed("information of login will be here")}
+              onPress={() => {
+                {
+                  email.includes("@")
+                    ? setNotValidMail(false)
+                    : setNotValidMail(true);
+                }
+                {
+                  password === confirmPassword
+                    ? setNotMatch(false)
+                    : setNotMatch(true);
+                }
+
+                {
+                  console.log("not valid emailvalid: ", notValidMail);
+                  console.log("notmatch: ", notMatch);
+                }
+              }}
               style={styles.loginButton}
             >
               <Text style={styles.loginButtonText}>SignUp</Text>
@@ -152,12 +198,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginVertical: 12,
-  },
-  inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#283039",
-    borderRadius: 12,
   },
   input: {
     flex: 1,

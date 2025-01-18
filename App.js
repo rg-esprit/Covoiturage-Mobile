@@ -5,6 +5,7 @@ import {
   Platform,
   View,
   Alert,
+  Button,
 } from "react-native";
 import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
@@ -18,7 +19,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       {isLoggedIn ? (
-        <Text>Welcome back!</Text>
+        <Button title="Logout" onPress={() => setIsLoggedIn(false)} />
       ) : (
         <LoginScreen loginpressed={handleloginpressed} />
       )}
