@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { useState } from "react";
 import LoginScreen from "./app/screens/LoginScreen";
+import HomeScreen from "./app/screens/HomeScreen";
+import TabBar from "./app/screens/TabBar";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,7 +21,12 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       {isLoggedIn ? (
-        <Button title="Logout" onPress={() => setIsLoggedIn(false)} />
+        <View style={styles.mainContent}>
+          <View style={styles.mainContent}>
+            <HomeScreen />
+          </View>
+          <TabBar onLogout={() => setIsLoggedIn(false)} />
+        </View>
       ) : (
         <LoginScreen loginpressed={handleloginpressed} />
       )}
@@ -32,5 +39,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#121212",
     paddingTop: Platform.OS === "android" ? 20 : 0,
+  },
+  mainContent: {
+    flex: 1,
   },
 });
